@@ -1,0 +1,94 @@
+@"
+{% extends 'social/base.html' %}
+{% block title %}{{ profile_user.username }} — CozyConnect{% endblock %}
+{% block content %}
+<div class="content-center">
+    <div class="profile-header-card">
+        <div class="d-flex align-items-center gap-4 flex-wrap">
+            <div class="avatar-cozy avatar-lg">
+                {% if profile.avatar %}
+                <img src="{{ profile.avatar.url }}" alt="avatar">
+                {% else %}
+                <div class="avatar-init">{{ profile_user.username|first|upper }}</div>
+                {% endif %}
+            </div>
+            <div class="flex-fill">
+                <div class="d-flex align-items-center gap-3 flex-wrap mb-2">
+                    <h4 style="font-weight:700;color:var(--text);margin:0;">{{ profile_user.username }}</h4>
+                    {% if request.user == profile_user %}
+                    <a href="{% url 'edit_profile' %}" class="btn-cozy-outline"
+                        style="font-size:0.82rem;padding:6px 14px;">
+                        <i class="bi bi-pencil-heart"></i> Edit Profile
+                    </a>
+                    {% else %}
+                    <a href="{% url 'follow' username=profile_user.username %}"
+                        class="{% if is_following %}btn-cozy-outline{% else %}btn-cozy{% endif %}"
+                        style="font-size:0.82rem;padding:6px 14px;">
+                        {% if is_following %}
+                        <i class="bi bi-person-dash"></i> Unfollow
+                        {% else %}
+                        <i class="bi bi-person-plus"></i> Follow
+                        {% endif %}
+                    </a>
+                    {% endif %}
+                </div>
+                {% if profile.bio %}
+                <p class="profile-bio mb-2">{{ profile.bio }}</p>
+                {% else %}
+                <p style="color:var(--muted);font-size:0.88rem;font-style:italic;" class="mb-2">No bio yet...</p>
+                {% endif %}
+                <div style="font-size:0.8rem;color:var(--muted);">
+                    <i class="bi bi-calendar-heart me-1"></i>Joined {{ profile_user.date_joined|date:"F Y" }}
+                </div>
+            </div>
+        </div>
+        <div class="d-flex mt-4 pt-3" style="border-top:1.5px solid var(--border);">
+            <div class="stat-box">
+                <span class="stat-num">{{ posts_count }}</span>
+                <span class="stat-label">Posts</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-num">{{ followers_count }}</span>
+                <span class="stat-label">Followers</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-num">{{ following_count }}</span>
+                <span class="stat-label">Following</span>
+            </div>
+        </div>
+    </div>
+
+    {% if posts %}
+    <div class="posts-grid">
+        {% for post in posts %}
+        <div class="grid-post">
+            {% if post.image %}
+            <img src="{{ post.image.url }}" alt="post">
+            {% else %}
+            <div class="grid-post-placeholder">
+                <i class="bi bi-chat-heart" style="font-size:1.5rem;color:var(--rose);"></i>
+                <span>{{ post.caption|truncatechars:25 }}</span>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="post-card">
+        <div class="empty-state">
+            <i class="bi bi-camera-heart"></i>
+            <h5>No posts yet</h5>
+            {% if request.user == profile_user %}
+            <p>Share your first cozy moment!</p>
+            <a href="{% url 'create_post' %}" class="btn-cozy">
+                <i class="bi bi-plus-lg"></i> Create Post
+            </a>
+            {% else %}
+            <p>{{ profile_user.username }} hasn't posted yet.</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+"@ | Set-Content templates\social\profile.html -Encoding UTF8

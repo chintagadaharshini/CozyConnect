@@ -1,0 +1,33 @@
+@"
+{% extends 'social/base.html' %}
+{% block title %}Login — CozyConnect{% endblock %}
+{% block content %}
+<div class="auth-card">
+    <div class="text-center mb-4">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">🌸</div>
+        <h3 style="font-weight:700;color:var(--text);">Welcome Back</h3>
+        <p style="color:var(--muted);font-size:0.88rem;">Login to CozyConnect</p>
+    </div>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" placeholder="Your username" required>
+        </div>
+        <div class="mb-4">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Your password" required>
+        </div>
+        {% if form.errors %}
+        <div class="alert alert-danger mb-3">Invalid username or password.</div>
+        {% endif %}
+        <button type="submit" class="btn-cozy w-100 justify-content-center py-2" style="display:flex;">
+            <i class="bi bi-box-arrow-in-right"></i> Login
+        </button>
+    </form>
+    <p class="text-center mt-3 mb-0" style="font-size:0.88rem;color:var(--muted);">
+        New here? <a href="{% url 'register' %}" style="color:var(--rose);font-weight:600;">Create an account</a>
+    </p>
+</div>
+{% endblock %}
+"@ | Set-Content templates\social\login.html -Encoding UTF8

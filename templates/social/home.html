@@ -1,0 +1,21 @@
+@"
+{% extends 'social/base.html' %}
+{% block title %}CozyConnect — Share Moments, Build Connections{% endblock %}
+{% block content %}
+<div class="auth-card text-center">
+    <div style="font-size:3.5rem;margin-bottom:1rem;">🌸</div>
+    <h1
+        style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,#F48FB1,#FF8A65);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+        CozyConnect</h1>
+    <p style="color:var(--muted);font-size:0.95rem;margin:0.5rem 0 2rem;font-style:italic;">"Share moments, build
+        connections."</p>
+    <a href="{% url 'register' %}" class="btn-cozy w-100 justify-content-center mb-3 py-2" style="display:flex;">
+        <i class="bi bi-person-plus"></i> Create Account
+    </a>
+    <a href="{% url 'login' %}" class="btn-cozy-outline w-100 justify-content-center py-2" style="display:flex;">
+        <i class="bi bi-box-arrow-in-right"></i> Login
+    </a>
+    <p style="margin-top:1.5rem;font-size:0.78rem;color:var(--muted);">A cozy place to share your world 🌷</p>
+</div>
+{% endblock %}
+"@ | Set-Content templates\social\home.html -Encoding UTF8

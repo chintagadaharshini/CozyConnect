@@ -1,0 +1,100 @@
+@"
+{% extends 'social/base.html' %}
+{% block title %}Home — CozyConnect{% endblock %}
+{% block content %}
+<div class="content-center">
+    <div class="page-header">
+        <h5 class="page-title"><i class="bi bi-house-heart-fill me-2" style="color:var(--rose);"></i>Your Feed</h5>
+        <a href="{% url 'create_post' %}" class="btn-cozy">
+            <i class="bi bi-plus-lg"></i> New Post
+        </a>
+    </div>
+
+    {% if posts %}
+    {% for post in posts %}
+    <div class="post-card">
+        <div class="post-header">
+            <a href="{% url 'profile' username=post.author.username %}" style="text-decoration:none;">
+                <div class="avatar-cozy">
+                    {% if post.author.profile.avatar %}
+                    <img src="{{ post.author.profile.avatar.url }}" alt="avatar">
+                    {% else %}
+                    <div class="avatar-init">{{ post.author.username|first|upper }}</div>
+                    {% endif %}
+                </div>
+            </a>
+            <div>
+                <a href="{% url 'profile' username=post.author.username %}"
+                    style="font-weight:600;color:var(--text);text-decoration:none;font-size:0.95rem;">
+                    {{ post.author.username }}
+                </a>
+                <div style="font-size:0.78rem;color:var(--muted);">
+                    <i class="bi bi-clock me-1"></i>{{ post.created_at|timesince }} ago
+                </div>
+            </div>
+        </div>
+
+        {% if post.image %}
+        <img src="{{ post.image.url }}" class="post-image" alt="post">
+        {% endif %}
+
+        <div class="post-actions">
+            <a href="{% url 'like_post' post.id %}" class="action-btn {% if post.id in liked_posts %}liked{% endif %}">
+                <i class="bi {% if post.id in liked_posts %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+                {{ post.get_likes_count }}
+            </a>
+            <span class="action-btn">
+                <i class="bi bi-chat-heart"></i>
+                {{ post.get_comments_count }}
+            </span>
+        </div>
+
+        {% if post.caption %}
+        <div class="post-caption">
+            <strong>{{ post.author.username }}</strong> {{ post.caption }}
+        </div>
+        {% endif %}
+
+        <div class="comments-section">
+            {% for comment in post.comments.all %}
+            <div class="comment-item">
+                <div class="avatar-cozy avatar-sm">
+                    {% if comment.author.profile.avatar %}
+                    <img src="{{ comment.author.profile.avatar.url }}" alt="avatar">
+                    {% else %}
+                    <div class="avatar-init">{{ comment.author.username|first|upper }}</div>
+                    {% endif %}
+                </div>
+                <div class="comment-bubble">
+                    <strong style="font-size:0.82rem;color:var(--text);">{{ comment.author.username }}</strong>
+                    <span style="margin-left:6px;color:var(--text);">{{ comment.content }}</span>
+                    <div class="comment-meta">{{ comment.created_at|timesince }} ago</div>
+                </div>
+            </div>
+            {% endfor %}
+            <form method="POST" action="{% url 'add_comment' post.id %}" class="comment-form">
+                {% csrf_token %}
+                <input type="text" name="content" class="form-control" placeholder="Add a cozy comment..."
+                    style="border-radius:20px;font-size:0.85rem;">
+                <button type="submit" class="btn-cozy" style="border-radius:20px;padding:8px 16px;white-space:nowrap;">
+                    <i class="bi bi-send-heart"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="post-card">
+        <div class="empty-state">
+            <i class="bi bi-camera-heart"></i>
+            <h5>No posts yet</h5>
+            <p>Be the first to share a cozy moment!</p>
+            <a href="{% url 'create_post' %}" class="btn-cozy">
+                <i class="bi bi-plus-lg"></i> Create First Post
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+"@ | Set-Content templates\social\feed.html -Encoding UTF8

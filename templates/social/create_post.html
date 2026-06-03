@@ -1,0 +1,36 @@
+@"
+{% extends 'social/base.html' %}
+{% block title %}New Post — CozyConnect{% endblock %}
+{% block content %}
+<div class="content-center">
+    <div class="post-card p-4">
+        <div class="text-center mb-4">
+            <div style="font-size:2rem;margin-bottom:0.5rem;">📸</div>
+            <h4 style="font-weight:700;color:var(--text);">Share a Moment</h4>
+            <p style="color:var(--muted);font-size:0.88rem;">Share something cozy with your connections</p>
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Image <span
+                        style="color:var(--muted);font-weight:400;">(optional)</span></label>
+                {{ form.image }}
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Caption</label>
+                {{ form.caption }}
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn-cozy flex-fill justify-content-center py-2" style="display:flex;">
+                    <i class="bi bi-send-heart"></i> Share Post
+                </button>
+                <a href="{% url 'feed' %}" class="btn-cozy-outline flex-fill justify-content-center py-2"
+                    style="display:flex;">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+"@ | Set-Content templates\social\create_post.html -Encoding UTF8
